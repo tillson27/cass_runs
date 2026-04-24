@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cassandra de Winter | Elite Runner & Mother of Three</title>
+    <meta name="description" content="Cassandra de Winter — elite endurance athlete, mother of three, Boston Marathon competitor, and creator of custom bracelets. Based in Alberta, Canada.">
+    <meta name="theme-color" content="#FAF8F5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #FAF8F5;
+            --color-text: #2C2C2C;
+            --color-text-light: #6B6560;
+            --color-accent: #C4883A;
+            --color-accent-soft: #E8D5BC;
+            --color-dark: #1A1A1A;
+            --color-white: #FFFFFF;
+            --color-divider: #E5DED6;
+            --font-heading: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.7;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        /* Touch-friendly tap targets */
+        a, button {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* Prevent text selection flash on taps */
+        nav a, .nav-links a, button {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
+        }
+
+        nav.scrolled {
+            background: rgba(250, 248, 245, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+            padding: 0.75rem 2rem;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 500;
+            color: var(--color-dark);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+            margin-right: -10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--color-dark);
+            transition: transform 0.3s, opacity 0.3s;
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+            background: url('images/boston-marathon.PNG') center 20% / cover no-repeat;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(250,248,245,0.88);
+            pointer-events: none;
+        }
+
+        .hero-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.2s forwards;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 600;
+            line-height: 1.05;
+            color: var(--color-dark);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.4s forwards;
+            position: relative;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--color-text);
+            font-weight: 400;
+            max-width: 520px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+            position: relative;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            opacity: 0;
+            animation: fadeUp 1s 0.8s forwards;
+            position: relative;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: var(--color-dark);
+        }
+
+        .hero-stat-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-text);
+            margin-top: 0.2rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeUp 1s 1.2s forwards;
+            z-index: 1;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 1px;
+            height: 48px;
+            background: var(--color-accent);
+            margin: 0 auto;
+            animation: scrollPulse 2s infinite;
+        }
+
+        /* ── Photo Strip ── */
+        .photo-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px;
+        }
+
+        .photo-strip-item {
+            aspect-ratio: 3/2;
+            overflow: hidden;
+        }
+
+        .photo-strip-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .photo-strip-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ── Sections shared ── */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 300;
+            color: var(--color-dark);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title em {
+            font-style: italic;
+        }
+
+        /* ── About ── */
+        .about {
+            background: var(--color-white);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            aspect-ratio: 4/5;
+            background: var(--color-accent-soft);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .about-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .about-text p {
+            margin-bottom: 1.25rem;
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+
+        .about-text p:first-of-type::first-letter {
+            font-family: var(--font-heading);
+            font-size: 3.2rem;
+            float: left;
+            line-height: 1;
+            margin-right: 0.5rem;
+            margin-top: 0.1rem;
+            color: var(--color-accent);
+        }
+
+        /* ── Personal Bests ── */
+        .pb-section {
+            background: var(--color-white);
+        }
+
+        .pb-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .pb-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            background: var(--color-bg);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .pb-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-4px);
+        }
+
+        .pb-distance {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .pb-time {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--color-accent);
+        }
+
+        /* ── Race Results ── */
+        .results-section {
+            background: var(--color-bg);
+        }
+
+        .season-block {
+            margin-bottom: 3rem;
+        }
+
+        .season-year {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--color-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .race-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 2rem;
+            align-items: baseline;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-divider);
+            transition: background 0.2s;
+        }
+
+        .race-row:hover {
+            background: rgba(196,136,58,0.04);
+        }
+
+        .race-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--color-dark);
+        }
+
+        .race-detail {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-top: 0.2rem;
+        }
+
+        .race-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+        }
+
+        .badge-gold {
+            background: rgba(196,136,58,0.15);
+            color: var(--color-accent);
+        }
+
+        .badge-record {
+            background: rgba(196,136,58,0.25);
+            color: #9A6B20;
+        }
+
+        .badge-silver {
+            background: rgba(180,180,180,0.2);
+            color: #888;
+        }
+
+        .race-placement {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            white-space: nowrap;
+        }
+
+        .race-time {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--color-dark);
+            white-space: nowrap;
+        }
+
+        /* ── Athletic Background ── */
+        .background-section {
+            background: var(--color-white);
+        }
+
+        .background-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .bg-card {
+            padding: 2.5rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+        .bg-card:hover {
+            border-color: var(--color-accent);
+        }
+
+        .bg-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--color-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .bg-card-subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1.25rem;
+        }
+
+        .bg-card ul {
+            list-style: none;
+        }
+
+        .bg-card li {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            padding: 0.4rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .bg-card li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.85rem;
+            width: 6px;
+            height: 1px;
+            background: var(--color-accent);
+        }
+
+        /* ── Upcoming Races ── */
+        .upcoming-section {
+            background: var(--color-bg);
+        }
+
+        .upcoming-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .upcoming-card {
+            padding: 2rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            transition: border-color 0.3s, transform 0.3s;
+            background: var(--color-white);
+        }
+
+        .upcoming-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-3px);
+        }
+
+        .upcoming-date {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .upcoming-name {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--color-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .upcoming-distance {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+
+        /* ── Bracelets ── */
+        .bracelets-section {
+            background: var(--color-dark);
+            color: var(--color-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bracelets-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(196,136,58,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .bracelets-section .section-title {
+            color: var(--color-white);
+        }
+
+        .bracelets-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .bracelets-text p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .bracelets-cta {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.85rem 2rem;
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .bracelets-cta:hover {
+            background: var(--color-accent);
+            color: var(--color-dark);
+        }
+
+        .bracelets-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .bracelet-placeholder {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.2);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* ── Photo Gallery ── */
+        .gallery-section {
+            background: var(--color-white);
+            overflow: hidden;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--color-accent-soft);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.04);
+        }
+
+        .gallery-item-tall {
+            grid-row: 1 / 3;
+            min-height: 400px;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1rem 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+            color: var(--color-white);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Instagram ── */
+        .instagram-section {
+            background: var(--color-white);
+            text-align: center;
+        }
+
+        .instagram-section .section-title {
+            margin-bottom: 0.5rem;
+        }
+
+        .instagram-handle {
+            font-size: 1rem;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 400;
+            transition: opacity 0.3s;
+        }
+
+        .instagram-handle:hover {
+            opacity: 0.7;
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 2.5rem;
+        }
+
+        .instagram-item {
+            aspect-ratio: 1;
+            background: var(--color-accent-soft);
+            border-radius: 4px;
+            overflow: hidden;
+            display: block;
+        }
+
+        .instagram-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s, opacity 0.3s;
+        }
+
+        .instagram-item:hover img {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .instagram-follow {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.85rem 2.5rem;
+            background: var(--color-dark);
+            color: var(--color-white);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .instagram-follow:hover {
+            background: var(--color-accent);
+        }
+
+        /* ── Footer ── */
+        footer {
+            background: var(--color-dark);
+            color: rgba(255,255,255,0.5);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-name {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--color-white);
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-email {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .footer-email:hover {
+            opacity: 0.7;
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            margin-top: 2rem;
+            opacity: 0.4;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive: Tablet ── */
+        @media (max-width: 900px) {
+            .about-grid,
+            .bracelets-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .about-image-wrapper {
+                aspect-ratio: 16/10;
+                max-height: 360px;
+            }
+
+            .pb-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .background-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .upcoming-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .instagram-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .race-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.75rem;
+            }
+
+            .race-placement {
+                display: none;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gallery-item-tall {
+                grid-row: auto;
+                min-height: 250px;
+            }
+        }
+
+        /* ── Responsive: Mobile ── */
+        @media (max-width: 640px) {
+            /* Prevent horizontal overflow */
+            html, body {
+                overflow-x: hidden;
+            }
+
+            /* iOS safe area support */
+            body {
+                padding-env: safe-area-inset-top safe-area-inset-right safe-area-inset-bottom safe-area-inset-left;
+            }
+
+            /* Body scroll lock when menu is open */
+            body.menu-open {
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+            }
+
+            /* ── Photo strip mobile ── */
+            .photo-strip {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2px;
+            }
+
+            .photo-strip-item {
+                aspect-ratio: 4/3;
+            }
+
+            /* ── Nav mobile ── */
+            nav {
+                padding: 0.9rem 1.25rem;
+            }
+
+            nav.scrolled {
+                padding: 0.75rem 1.25rem;
+            }
+
+            .nav-logo {
+                font-size: 1.15rem;
+            }
+
+            .hamburger {
+                display: flex;
+                z-index: 201;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 200;
+                background: var(--color-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 0;
+                padding: 5rem 2rem;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid var(--color-divider);
+            }
+
+            .nav-links li:first-child {
+                border-top: 1px solid var(--color-divider);
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                letter-spacing: 0.15em;
+                display: block;
+                padding: 1.1rem 0;
+                color: var(--color-dark);
+            }
+
+            /* ── Hero mobile ── */
+            .hero {
+                min-height: 100svh;
+                padding: 5rem 1.25rem 3rem;
+            }
+
+            .hero-label {
+                font-size: 0.6rem;
+                letter-spacing: 0.2em;
+                margin-bottom: 1rem;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.6rem, 12vw, 4rem);
+                margin-bottom: 1rem;
+            }
+
+            .hero-sub {
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+                line-height: 1.6;
+                padding: 0 0.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.75rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-stat-value {
+                font-size: 1.8rem;
+            }
+
+            .hero-stat-label {
+                font-size: 0.6rem;
+                letter-spacing: 0.12em;
+            }
+
+            .scroll-indicator {
+                bottom: 1.5rem;
+            }
+
+            .scroll-indicator span {
+                height: 32px;
+            }
+
+            /* ── Sections shared mobile ── */
+            section {
+                padding: 3.5rem 1.25rem;
+            }
+
+            .section-label {
+                font-size: 0.65rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+                margin-bottom: 1.25rem;
+            }
+
+            /* ── About mobile ── */
+            .about-grid {
+                gap: 2rem;
+            }
+
+            .about-image-wrapper {
+                aspect-ratio: 4/3;
+                max-height: 280px;
+            }
+
+            .about-text p {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+                line-height: 1.65;
+            }
+
+            .about-text p:first-of-type::first-letter {
+                font-size: 2.6rem;
+            }
+
+            /* ── PBs mobile ── */
+            .pb-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                margin-top: 2rem;
+            }
+
+            .pb-card {
+                padding: 1.25rem 0.75rem;
+            }
+
+            .pb-card:last-child {
+                grid-column: 1 / -1;
+                max-width: calc(50% - 0.375rem);
+                margin: 0 auto;
+            }
+
+            .pb-distance {
+                font-size: 0.6rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .pb-time {
+                font-size: 1.6rem;
+            }
+
+            /* ── Race Results mobile ── */
+            .season-block {
+                margin-bottom: 2rem;
+            }
+
+            .season-year {
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+
+            .race-row {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                padding: 0.85rem 0;
+            }
+
+            .race-name {
+                font-size: 0.9rem;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 0.35rem;
+            }
+
+            .race-badge {
+                margin-left: 0;
+                font-size: 0.55rem;
+                padding: 0.15rem 0.45rem;
+            }
+
+            .race-detail {
+                font-size: 0.78rem;
+                margin-top: 0.15rem;
+            }
+
+            .race-time {
+                font-size: 1.15rem;
+                margin-top: 0.15rem;
+            }
+
+            .race-placement {
+                display: none;
+            }
+
+            /* ── Background mobile ── */
+            .background-grid {
+                gap: 1.25rem;
+            }
+
+            .bg-card {
+                padding: 1.5rem;
+            }
+
+            .bg-card-title {
+                font-size: 1.3rem;
+            }
+
+            .bg-card-subtitle {
+                font-size: 0.7rem;
+                margin-bottom: 1rem;
+            }
+
+            .bg-card li {
+                font-size: 0.85rem;
+                padding: 0.3rem 0;
+                padding-left: 1rem;
+            }
+
+            .bg-card li::before {
+                top: 0.75rem;
+                width: 5px;
+            }
+
+            /* ── Upcoming mobile ── */
+            .upcoming-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .upcoming-card {
+                padding: 1.25rem 1.5rem;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                gap: 0 1rem;
+            }
+
+            .upcoming-date {
+                font-size: 0.65rem;
+                width: 100%;
+                margin-bottom: 0.2rem;
+            }
+
+            .upcoming-name {
+                font-size: 1.1rem;
+                margin-bottom: 0;
+            }
+
+            .upcoming-distance {
+                font-size: 0.8rem;
+            }
+
+            /* ── Bracelets mobile ── */
+            .bracelets-content {
+                gap: 2rem;
+            }
+
+            .bracelets-text p {
+                font-size: 0.9rem;
+                line-height: 1.65;
+            }
+
+            .bracelets-cta {
+                display: block;
+                text-align: center;
+                padding: 1rem 2rem;
+                font-size: 0.75rem;
+            }
+
+            .bracelets-visual {
+                gap: 0.5rem;
+            }
+
+            .bracelet-placeholder {
+                font-size: 0.8rem;
+            }
+
+            /* ── Gallery mobile ── */
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .gallery-item-tall {
+                min-height: 200px;
+                grid-column: 1 / -1;
+            }
+
+            .gallery-caption {
+                font-size: 0.7rem;
+                padding: 1.5rem 0.75rem 0.75rem;
+            }
+
+            /* ── Instagram mobile ── */
+            .instagram-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+                margin-top: 2rem;
+            }
+
+            .instagram-handle {
+                font-size: 0.9rem;
+            }
+
+            .instagram-follow {
+                margin-top: 2rem;
+                padding: 1rem 2rem;
+                font-size: 0.75rem;
+                display: block;
+                text-align: center;
+            }
+
+            /* ── Footer mobile ── */
+            footer {
+                padding: 2.5rem 1.25rem;
+                padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
+            }
+
+            .footer-name {
+                font-size: 1.25rem;
+            }
+
+            .footer-tagline {
+                font-size: 0.8rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 1rem 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .footer-links a {
+                font-size: 0.7rem;
+            }
+
+            .footer-copy {
+                font-size: 0.65rem;
+            }
+
+            /* ── Animations reduced on mobile ── */
+            .reveal {
+                transform: translateY(20px);
+                transition: opacity 0.6s, transform 0.6s;
+            }
+        }
+
+        /* ── Responsive: Small phones (375px and below) ── */
+        @media (max-width: 375px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-stats {
+                gap: 1.25rem;
+            }
+
+            .hero-stat-value {
+                font-size: 1.5rem;
+            }
+
+            .hero-sub {
+                font-size: 0.85rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .pb-time {
+                font-size: 1.4rem;
+            }
+
+            .bg-card {
+                padding: 1.25rem;
+            }
+        }
+
+        /* ── Prefer reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .hero-label, .hero h1, .hero-sub, .hero-stats, .scroll-indicator {
+                animation: none;
+                opacity: 1;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .scroll-indicator span {
+                animation: none;
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">Cassandra de Winter</a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#background">Background</a></li>
+            <li><a href="#upcoming">Upcoming</a></li>
+            <li><a href="#bracelets">Bracelets</a></li>
+            <li><a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <p class="hero-label">Elite Endurance Athlete &middot; Alberta, Canada</p>
+        <h1>Cassandra<br><em>de Winter</em></h1>
+        <p class="hero-sub">Mother of three. Boston Marathon competitor. Course record holder. Proving that motherhood and elite athletics aren't mutually exclusive.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">2:34</div>
+                <div class="hero-stat-label">Marathon</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">1:12</div>
+                <div class="hero-stat-label">Half Marathon</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">10:03</div>
+                <div class="hero-stat-label">100km Ultra</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Photo Strip -->
+    <div class="photo-strip">
+        <div class="photo-strip-item">
+            <img src="images/boston-marathon.PNG" alt="Boston Marathon" loading="lazy">
+        </div>
+        <div class="photo-strip-item">
+            <img src="images/lost-soul-finish.PNG" alt="Lost Soul Ultra finish" loading="lazy">
+        </div>
+        <div class="photo-strip-item">
+            <img src="images/mesa-half.PNG" alt="Mesa Half Marathon" loading="lazy">
+        </div>
+        <div class="photo-strip-item">
+            <img src="images/victoria-finish.PNG" alt="Royal Victoria Marathon" loading="lazy">
+        </div>
+    </div>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image-wrapper reveal">
+                    <img src="images/trail-running.PNG" alt="Cassandra de Winter trail running in Alberta with the Lethbridge High Level Bridge in the background" loading="lazy">
+                </div>
+                <div class="about-text reveal">
+                    <span class="section-label">My Story</span>
+                    <h2 class="section-title">Before anything else,<br>I'm a <em>mom</em></h2>
+                    <p>Before anything else, I'm a mom to three young kids. My mornings begin early, balancing training with the familiar rhythm of little ones waking before the sun. In the midst of motherhood, I've found my way back to something that has always been part of who I am: movement, competition, and the drive to push my limits.</p>
+                    <p>In 2025, after a few years focused on growing my family, I returned to sport through endurance racing. What started as a quiet comeback quickly turned into something much bigger. Running became a way to reconnect with myself, to rediscover strength, and to show my children what it looks like to chase something wholeheartedly.</p>
+                    <p>My background in national-level rugby and strength sport gave me a foundation, but stepping into the endurance world has felt like starting fresh in the most humbling and exciting way. My journey is about balancing high-level training with motherhood, and inviting others&mdash;especially women and mothers&mdash;to believe that there is still space for their own ambitions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Bests -->
+    <section class="pb-section" id="pbs">
+        <div class="container">
+            <p class="section-label">Personal Bests</p>
+            <h2 class="section-title">The <em>numbers</em></h2>
+            <div class="pb-grid">
+                <div class="pb-card reveal">
+                    <div class="pb-distance">10 km</div>
+                    <div class="pb-time">35:26</div>
+                </div>
+                <div class="pb-card reveal">
+                    <div class="pb-distance">Half Marathon</div>
+                    <div class="pb-time">1:12:54</div>
+                </div>
+                <div class="pb-card reveal">
+                    <div class="pb-distance">Marathon</div>
+                    <div class="pb-time">2:34:43</div>
+                </div>
+                <div class="pb-card reveal">
+                    <div class="pb-distance">54 km Ultra</div>
+                    <div class="pb-time">5:26:00</div>
+                </div>
+                <div class="pb-card reveal">
+                    <div class="pb-distance">100 km Ultra</div>
+                    <div class="pb-time">10:03:12</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Race Results -->
+    <section class="results-section" id="results">
+        <div class="container">
+            <p class="section-label">Race Results</p>
+            <h2 class="section-title">From comeback to <em>course records</em></h2>
+
+            <!-- 2026 Season -->
+            <div class="season-block reveal">
+                <h3 class="season-year">2026</h3>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Boston Marathon
+                            <span class="race-badge badge-gold">Pro Start</span>
+                        </div>
+                        <div class="race-detail">1st Canadian Female &middot; 27th Overall Female</div>
+                    </div>
+                    <div class="race-placement">1st CAN Female</div>
+                    <div class="race-time">2:34:43</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Moonlight Run 10K
+                            <span class="race-badge badge-record">Course Record</span>
+                        </div>
+                        <div class="race-detail">1st Place Female &middot; Female course record (unofficial)</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">35:26</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">Mesa Half Marathon</div>
+                        <div class="race-detail">4th Place Female</div>
+                    </div>
+                    <div class="race-placement">4th Female</div>
+                    <div class="race-time">1:12:54</div>
+                </div>
+            </div>
+
+            <!-- 2025 Season -->
+            <div class="season-block reveal">
+                <h3 class="season-year">2025</h3>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Lost Soul Ultra 100km
+                            <span class="race-badge badge-record">Course Record</span>
+                        </div>
+                        <div class="race-detail">1st Overall (Male &amp; Female) &middot; 2200m elevation</div>
+                    </div>
+                    <div class="race-placement">1st Overall</div>
+                    <div class="race-time">10:03</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Black Spur Ultra 54km
+                            <span class="race-badge badge-record">Course Record</span>
+                        </div>
+                        <div class="race-detail">1st Place Female &middot; 2230m elevation</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">5:26:00</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">Royal Victoria Marathon</div>
+                        <div class="race-detail">1st Place Female</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">2:39:50</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Taber Tuff
+                            <span class="race-badge badge-record">Course Record</span>
+                        </div>
+                        <div class="race-detail">1st Place Female</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">2:16:02</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">
+                            Coulee Cactus Crawl
+                            <span class="race-badge badge-record">Course Record</span>
+                        </div>
+                        <div class="race-detail">1st Place Female</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">2:47:43</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">Stampede Road Race</div>
+                        <div class="race-detail">1st Place Female</div>
+                    </div>
+                    <div class="race-placement">1st Female</div>
+                    <div class="race-time">1:20</div>
+                </div>
+
+                <div class="race-row">
+                    <div>
+                        <div class="race-name">Calgary Marathon</div>
+                        <div class="race-detail">2nd Place Female &middot; 4 months postpartum</div>
+                    </div>
+                    <div class="race-placement">2nd Female</div>
+                    <div class="race-time">2:52:50</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="gallery-section">
+        <div class="container">
+            <p class="section-label">On the Course</p>
+            <h2 class="section-title">Moments that <em>matter</em></h2>
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-item-tall reveal">
+                    <img src="images/boston-marathon.PNG" alt="Cassandra racing at the Boston Marathon with pro bib" loading="lazy">
+                    <div class="gallery-caption">Boston Marathon 2026</div>
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/lost-soul-finish.PNG" alt="Cassandra at the Lost Soul Ultra finish line with her baby and trophy" loading="lazy">
+                    <div class="gallery-caption">Lost Soul Ultra &mdash; 1st Overall</div>
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/victoria-finish.PNG" alt="Cassandra after winning the Royal Victoria Marathon" loading="lazy">
+                    <div class="gallery-caption">Royal Victoria Marathon</div>
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/mesa-half.PNG" alt="Cassandra with medal after the Mesa Half Marathon" loading="lazy">
+                    <div class="gallery-caption">Mesa Half Marathon</div>
+                </div>
+                <div class="gallery-item reveal">
+                    <img src="images/mesa-family.PNG" alt="Cassandra with her family at the Mesa Marathon" loading="lazy">
+                    <div class="gallery-caption">Family at Mesa Marathon</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Athletic Background -->
+    <section class="background-section" id="background">
+        <div class="container">
+            <p class="section-label">Athletic Background</p>
+            <h2 class="section-title">Built on a lifetime of <em>sport</em></h2>
+            <div class="background-grid">
+                <div class="bg-card reveal">
+                    <h3 class="bg-card-title">Rugby</h3>
+                    <p class="bg-card-subtitle">University of Lethbridge &middot; National Team</p>
+                    <ul>
+                        <li>Canadian U20 Women's National Team (2011)</li>
+                        <li>Canada West All-Star &mdash; Back Three</li>
+                        <li>Conference-leading try scorer (2 consecutive seasons)</li>
+                        <li>Key contributor to Canada West Championship team</li>
+                        <li>Rugby Alberta &mdash; Lead scorer &amp; captain (multiple seasons)</li>
+                    </ul>
+                </div>
+                <div class="bg-card reveal">
+                    <h3 class="bg-card-title">Powerlifting</h3>
+                    <p class="bg-card-subtitle">10+ Years in Fitness Industry</p>
+                    <ul>
+                        <li>Overall Female Champion &mdash; Drug Free Competition (2018)</li>
+                        <li>Squat: 292 lbs</li>
+                        <li>Bench Press: 156 lbs</li>
+                        <li>Deadlift: 370 lbs</li>
+                        <li>Certified Personal Trainer &amp; Coach</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Races -->
+    <section class="upcoming-section" id="upcoming">
+        <div class="container">
+            <p class="section-label">2026 Calendar</p>
+            <h2 class="section-title">What's <em>next</em></h2>
+            <div class="upcoming-grid">
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">May 2, 2026</p>
+                    <h3 class="upcoming-name">Oldman Backyard Ultra</h3>
+                    <p class="upcoming-distance">Last-person-standing format</p>
+                </div>
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">May 25, 2026</p>
+                    <h3 class="upcoming-name">Calgary Marathon</h3>
+                    <p class="upcoming-distance">Marathon</p>
+                </div>
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">June 6, 2026</p>
+                    <h3 class="upcoming-name">Cactus Crawl</h3>
+                    <p class="upcoming-distance">20 Miler</p>
+                </div>
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">August 16, 2026</p>
+                    <h3 class="upcoming-name">Edmonton Half Marathon</h3>
+                    <p class="upcoming-distance">Half Marathon</p>
+                </div>
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">September 11, 2026</p>
+                    <h3 class="upcoming-name">Lost Soul Ultra</h3>
+                    <p class="upcoming-distance">100 Miles</p>
+                </div>
+                <div class="upcoming-card reveal">
+                    <p class="upcoming-date">October 17&ndash;18, 2026</p>
+                    <h3 class="upcoming-name">Toronto Waterfront Marathon</h3>
+                    <p class="upcoming-distance">Marathon</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Bracelets -->
+    <section class="bracelets-section" id="bracelets">
+        <div class="container">
+            <div class="bracelets-content">
+                <div class="bracelets-text reveal">
+                    <p class="section-label">Handmade</p>
+                    <h2 class="section-title">Custom <em>Bracelets</em></h2>
+                    <p>Beyond the trails and the finish lines, I create custom handmade bracelets&mdash;each one designed with intention. Whether it's a race mantra, a meaningful word, or a reminder of what you're capable of, these bracelets carry the same energy I bring to the start line.</p>
+                    <p>Perfect for runners, mothers, or anyone who needs a little wearable motivation. Every piece is made by hand with care.</p>
+                    <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="bracelets-cta">Inquire on Instagram</a>
+                </div>
+                <div class="bracelets-visual reveal">
+                    <div class="bracelet-placeholder">Add bracelet photo</div>
+                    <div class="bracelet-placeholder">Add bracelet photo</div>
+                    <div class="bracelet-placeholder">Add bracelet photo</div>
+                    <div class="bracelet-placeholder">Add bracelet photo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram -->
+    <section class="instagram-section" id="instagram">
+        <div class="container">
+            <p class="section-label">Follow the Journey</p>
+            <h2 class="section-title"><em>@cassdewinter.runs</em></h2>
+            <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-handle">instagram.com/cassdewinter.runs</a>
+            <div class="instagram-grid">
+                <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-item reveal">
+                    <img src="images/boston-marathon.PNG" alt="Boston Marathon" loading="lazy">
+                </a>
+                <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-item reveal">
+                    <img src="images/trail-running.PNG" alt="Trail running in Alberta" loading="lazy">
+                </a>
+                <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-item reveal">
+                    <img src="images/lost-soul-finish.PNG" alt="Lost Soul Ultra finish" loading="lazy">
+                </a>
+                <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-item reveal">
+                    <img src="images/victoria-race.PNG" alt="Racing in Victoria" loading="lazy">
+                </a>
+            </div>
+            <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener" class="instagram-follow">Follow on Instagram</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-name">Cassandra de Winter</div>
+        <p class="footer-tagline">Elite endurance athlete, mother of three, and maker of things&mdash;based in Alberta, Canada.</p>
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#results">Results</a>
+            <a href="#bracelets">Bracelets</a>
+            <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 Cassandra de Winter. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+
+        // Mobile menu with scroll lock
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        let scrollPos = 0;
+
+        function toggleMenu() {
+            const isOpen = navLinks.classList.toggle('open');
+            hamburger.classList.toggle('active');
+
+            if (isOpen) {
+                scrollPos = window.scrollY;
+                document.body.classList.add('menu-open');
+                document.body.style.top = `-${scrollPos}px`;
+            } else {
+                document.body.classList.remove('menu-open');
+                document.body.style.top = '';
+                window.scrollTo(0, scrollPos);
+            }
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('open')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                toggleMenu();
+            }
+        });
+
+        // Scroll reveal with mobile-friendly thresholds
+        const isMobile = window.innerWidth <= 640;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: isMobile ? 0.08 : 0.15,
+            rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
