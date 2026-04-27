@@ -319,9 +319,9 @@
         .event-card {
             border: 1px solid var(--color-divider);
             border-radius: 6px;
-            padding: 1.1rem 1.25rem;
             background: var(--color-bg);
             transition: border-color 0.2s;
+            overflow: hidden;
         }
 
         .event-card.completed {
@@ -330,12 +330,12 @@
 
         .event-card:focus-within { border-color: var(--color-accent); }
 
-        .event-row {
+        .event-header {
             display: grid;
             grid-template-columns: auto 1fr auto;
             gap: 1rem;
             align-items: center;
-            margin-bottom: 0.85rem;
+            padding: 1rem 1.25rem;
         }
 
         .event-completed-toggle {
@@ -351,15 +351,76 @@
         }
 
         .event-completed-toggle input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             accent-color: var(--color-accent);
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .event-completed-toggle.is-completed {
             color: var(--color-accent);
             font-weight: 500;
+        }
+
+        .event-summary {
+            display: none;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .event-summary-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--color-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-summary-name.is-empty {
+            color: var(--color-text-light);
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .event-summary-meta {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            margin-top: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-chevron {
+            display: none;
+            background: transparent;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .event-chevron::after {
+            content: '';
+            display: block;
+            width: 9px;
+            height: 9px;
+            border-right: 2px solid var(--color-accent);
+            border-bottom: 2px solid var(--color-accent);
+            transform: rotate(45deg);
+            transition: transform 0.3s;
+            margin-top: -3px;
+        }
+
+        .event-card.collapsed .event-chevron::after {
+            transform: rotate(-45deg);
+            margin-top: 3px;
+        }
+
+        .event-body {
+            padding: 0 1.25rem 1.1rem;
         }
 
         .event-grid {
@@ -380,7 +441,7 @@
         .event-grid input,
         .event-grid select {
             width: 100%;
-            padding: 0.5rem 0.65rem;
+            padding: 0.55rem 0.7rem;
             border: 1px solid var(--color-divider);
             border-radius: 4px;
             font-size: 0.88rem;
@@ -399,6 +460,12 @@
         .field-time { grid-column: span 3; }
         .field-place { grid-column: span 5; }
         .field-details { grid-column: span 12; }
+
+        .event-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.85rem;
+        }
 
         /* ── Status messages ── */
         .toast {
@@ -463,27 +530,104 @@
         /* ── Responsive ── */
         @media (max-width: 720px) {
             .admin-header {
-                padding: 0.85rem 1rem;
+                padding: 0.75rem 1rem;
+                gap: 0.5rem;
             }
 
-            .admin-title { font-size: 1.15rem; }
+            .admin-title { font-size: 1.05rem; }
+
+            .admin-actions {
+                gap: 0.4rem;
+            }
+
+            .admin-actions .btn-ghost {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.65rem;
+                letter-spacing: 0.05em;
+            }
 
             .admin-main {
-                padding: 1rem;
+                padding: 1rem 0.85rem;
             }
 
             .admin-section {
-                padding: 1.25rem;
+                padding: 1.1rem 1rem;
+            }
+
+            .section-heading h2 {
+                font-size: 1.25rem;
             }
 
             .pb-form {
                 grid-template-columns: 1fr 1fr;
+                gap: 0.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .pb-field input {
+                padding: 0.6rem 0.7rem;
+                font-size: 0.95rem;
+            }
+
+            .filter-bar {
+                width: 100%;
+                gap: 0.4rem;
+            }
+
+            .filter-chip {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.7rem;
+                letter-spacing: 0.05em;
+                flex: 1;
+                min-width: 0;
+            }
+
+            #addEventBtn {
+                margin-left: 0 !important;
+                width: 100%;
+                margin-top: 0.5rem;
+                padding: 0.75rem 1rem;
+            }
+
+            /* Collapsible event cards on mobile */
+            .event-header {
+                padding: 0.85rem 1rem;
                 gap: 0.75rem;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .event-completed-toggle {
+                gap: 0;
+                font-size: 0;
+            }
+
+            .event-summary {
+                display: block;
+            }
+
+            .event-chevron {
+                display: block;
+            }
+
+            .event-body {
+                padding: 0 1rem 1rem;
+                max-height: 2000px;
+                opacity: 1;
+                overflow: hidden;
+                transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
+            }
+
+            .event-card.collapsed .event-body {
+                max-height: 0;
+                opacity: 0;
+                padding-top: 0;
+                padding-bottom: 0;
             }
 
             .event-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 0.6rem;
+                gap: 0.55rem;
             }
 
             .field-name,
@@ -496,19 +640,39 @@
                 grid-column: span 2;
             }
 
-            .event-row {
-                grid-template-columns: 1fr auto;
-                gap: 0.75rem;
+            .event-grid input,
+            .event-grid select {
+                padding: 0.65rem 0.75rem;
+                font-size: 0.95rem;
             }
 
             .save-bar {
                 flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .save-bar .btn-primary {
+                width: 100%;
+                padding: 0.95rem 1rem;
             }
 
             .save-status {
                 width: 100%;
                 margin-right: 0;
                 text-align: center;
+            }
+
+            .toast {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .pb-form {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -803,7 +967,32 @@
                 .replace(/>/g, '&gt;');
         }
 
-        function eventCardHTML(e) {
+        function formatDateShort(iso) {
+            if (!iso) return '';
+            const parts = String(iso).split('-');
+            if (parts.length !== 3) return iso;
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const m = Number(parts[1]);
+            const d = Number(parts[2]);
+            const y = parts[0];
+            if (!months[m - 1]) return iso;
+            return `${months[m - 1]} ${d}, ${y}`;
+        }
+
+        function summaryMeta(e) {
+            const parts = [];
+            if (e.date) parts.push(formatDateShort(e.date));
+            if (e.completed) {
+                if (e.time) parts.push(e.time);
+                else if (e.distance) parts.push(e.distance);
+            } else {
+                if (e.distance) parts.push(e.distance);
+            }
+            if (e.place) parts.push(e.place);
+            return parts.join(' · ');
+        }
+
+        function eventCardHTML(e, isCollapsed) {
             const labelOptions = LABEL_OPTIONS.map(opt => {
                 const display = opt === '' ? '— None —' : opt;
                 const sel = (opt === (e.label || '')) ? ' selected' : '';
@@ -811,46 +1000,60 @@
             }).join('');
 
             const completedClass = e.completed ? ' is-completed' : '';
-            const cardClass = e.completed ? 'event-card completed' : 'event-card';
+            const cardClasses = ['event-card'];
+            if (e.completed) cardClasses.push('completed');
+            if (isCollapsed) cardClasses.push('collapsed');
+
+            const summaryName = e.name ? escapeAttr(e.name) : 'Untitled event';
+            const nameClass = e.name ? 'event-summary-name' : 'event-summary-name is-empty';
+            const meta = summaryMeta(e);
 
             return `
-                <div class="${cardClass}" data-id="${escapeAttr(e.id)}">
-                    <div class="event-row">
-                        <label class="event-completed-toggle${completedClass}">
+                <div class="${cardClasses.join(' ')}" data-id="${escapeAttr(e.id)}">
+                    <div class="event-header">
+                        <label class="event-completed-toggle${completedClass}" data-stop-toggle>
                             <input type="checkbox" data-field="completed" ${e.completed ? 'checked' : ''}>
                             <span>${e.completed ? 'Completed' : 'Mark Complete'}</span>
                         </label>
-                        <div></div>
-                        <button class="btn-danger" data-action="delete">Delete</button>
+                        <div class="event-summary">
+                            <div class="${nameClass}">${summaryName}</div>
+                            ${meta ? `<div class="event-summary-meta">${escapeAttr(meta)}</div>` : ''}
+                        </div>
+                        <button type="button" class="event-chevron" aria-label="Toggle"></button>
                     </div>
-                    <div class="event-grid">
-                        <div class="field-name">
-                            <label>Name</label>
-                            <input type="text" data-field="name" value="${escapeAttr(e.name)}" placeholder="Event name">
+                    <div class="event-body">
+                        <div class="event-grid">
+                            <div class="field-name">
+                                <label>Name</label>
+                                <input type="text" data-field="name" value="${escapeAttr(e.name)}" placeholder="Event name">
+                            </div>
+                            <div class="field-date">
+                                <label>Date</label>
+                                <input type="date" data-field="date" value="${escapeAttr(e.date)}">
+                            </div>
+                            <div class="field-label">
+                                <label>Label</label>
+                                <select data-field="label">${labelOptions}</select>
+                            </div>
+                            <div class="field-distance">
+                                <label>Distance</label>
+                                <input type="text" data-field="distance" value="${escapeAttr(e.distance)}" placeholder="Marathon, 10K, etc.">
+                            </div>
+                            <div class="field-time">
+                                <label>Time</label>
+                                <input type="text" data-field="time" value="${escapeAttr(e.time)}" placeholder="2:34:43">
+                            </div>
+                            <div class="field-place">
+                                <label>Place</label>
+                                <input type="text" data-field="place" value="${escapeAttr(e.place)}" placeholder="1st Female">
+                            </div>
+                            <div class="field-details">
+                                <label>Details</label>
+                                <input type="text" data-field="details" value="${escapeAttr(e.details)}" placeholder="Optional description">
+                            </div>
                         </div>
-                        <div class="field-date">
-                            <label>Date</label>
-                            <input type="date" data-field="date" value="${escapeAttr(e.date)}">
-                        </div>
-                        <div class="field-label">
-                            <label>Label</label>
-                            <select data-field="label">${labelOptions}</select>
-                        </div>
-                        <div class="field-distance">
-                            <label>Distance</label>
-                            <input type="text" data-field="distance" value="${escapeAttr(e.distance)}" placeholder="Marathon, 10K, etc.">
-                        </div>
-                        <div class="field-time">
-                            <label>Time</label>
-                            <input type="text" data-field="time" value="${escapeAttr(e.time)}" placeholder="2:34:43">
-                        </div>
-                        <div class="field-place">
-                            <label>Place</label>
-                            <input type="text" data-field="place" value="${escapeAttr(e.place)}" placeholder="1st Female">
-                        </div>
-                        <div class="field-details">
-                            <label>Details</label>
-                            <input type="text" data-field="details" value="${escapeAttr(e.details)}" placeholder="Optional description">
+                        <div class="event-card-footer">
+                            <button class="btn-danger" data-action="delete">Delete Event</button>
                         </div>
                     </div>
                 </div>`;
@@ -866,6 +1069,10 @@
             return state.events;
         }
 
+        // Tracks which event ids are expanded (mobile only — affects collapsed class).
+        // Defaults to collapsed; cards are added here when user expands or creates new.
+        const expandedIds = new Set();
+
         function renderEvents() {
             const filtered = getFilteredEvents();
             // Sort: upcoming first by date asc, completed by date desc
@@ -880,7 +1087,56 @@
                 return;
             }
 
-            eventsList.innerHTML = filtered.map(eventCardHTML).join('');
+            eventsList.innerHTML = filtered
+                .map(e => eventCardHTML(e, !expandedIds.has(e.id)))
+                .join('');
+        }
+
+        // Update only a single card's summary line (avoids re-render that loses focus)
+        function refreshCardSummary(id) {
+            const evt = state.events.find(x => x.id === id);
+            if (!evt) return;
+            const card = eventsList.querySelector(`[data-id="${CSS.escape(id)}"]`);
+            if (!card) return;
+
+            const nameEl = card.querySelector('.event-summary-name');
+            if (nameEl) {
+                if (evt.name) {
+                    nameEl.textContent = evt.name;
+                    nameEl.classList.remove('is-empty');
+                } else {
+                    nameEl.textContent = 'Untitled event';
+                    nameEl.classList.add('is-empty');
+                }
+            }
+
+            const metaEl = card.querySelector('.event-summary-meta');
+            const metaText = summaryMeta(evt);
+            const summaryEl = card.querySelector('.event-summary');
+            if (metaEl) {
+                if (metaText) metaEl.textContent = metaText;
+                else metaEl.remove();
+            } else if (metaText && summaryEl) {
+                const div = document.createElement('div');
+                div.className = 'event-summary-meta';
+                div.textContent = metaText;
+                summaryEl.appendChild(div);
+            }
+        }
+
+        function refreshCardCompletedState(id) {
+            const evt = state.events.find(x => x.id === id);
+            if (!evt) return;
+            const card = eventsList.querySelector(`[data-id="${CSS.escape(id)}"]`);
+            if (!card) return;
+
+            card.classList.toggle('completed', !!evt.completed);
+            const toggle = card.querySelector('.event-completed-toggle');
+            if (toggle) {
+                toggle.classList.toggle('is-completed', !!evt.completed);
+                const span = toggle.querySelector('span');
+                if (span) span.textContent = evt.completed ? 'Completed' : 'Mark Complete';
+            }
         }
 
         // Field edit delegation
@@ -896,26 +1152,51 @@
 
             if (field === 'completed') {
                 evt.completed = target.checked;
-                // re-render to update card styling and toggle label
-                renderEvents();
+                refreshCardCompletedState(id);
+                refreshCardSummary(id);
+                // If event no longer matches the active filter, drop it from view.
+                if (state.filter === 'completed' && !evt.completed) renderEvents();
+                else if (state.filter === 'upcoming' && evt.completed) renderEvents();
             } else {
                 evt[field] = target.value;
+                // Update collapsed summary line in place (preserves focus).
+                if (field === 'name' || field === 'date' || field === 'time' ||
+                    field === 'distance' || field === 'place') {
+                    refreshCardSummary(id);
+                }
             }
             setEventsDirty(true);
         });
 
         eventsList.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-action="delete"]');
-            if (!btn) return;
-            const card = btn.closest('.event-card');
+            // Delete button
+            const delBtn = e.target.closest('[data-action="delete"]');
+            if (delBtn) {
+                const card = delBtn.closest('.event-card');
+                if (!card) return;
+                const id = card.dataset.id;
+                const evt = state.events.find(x => x.id === id);
+                const name = evt && evt.name ? evt.name : 'this event';
+                if (!confirm(`Delete "${name}"? This cannot be undone (until you save, you can refresh to recover).`)) return;
+                state.events = state.events.filter(x => x.id !== id);
+                expandedIds.delete(id);
+                setEventsDirty(true);
+                renderEvents();
+                return;
+            }
+
+            // Expand/collapse on header tap (but not when tapping the checkbox/label)
+            const header = e.target.closest('.event-header');
+            if (!header) return;
+            // Don't toggle when interacting with the completed checkbox or its label
+            if (e.target.closest('[data-stop-toggle]')) return;
+
+            const card = header.closest('.event-card');
             if (!card) return;
             const id = card.dataset.id;
-            const evt = state.events.find(x => x.id === id);
-            const name = evt && evt.name ? evt.name : 'this event';
-            if (!confirm(`Delete "${name}"? This cannot be undone (until you save, you can refresh to recover).`)) return;
-            state.events = state.events.filter(x => x.id !== id);
-            setEventsDirty(true);
-            renderEvents();
+            const isCollapsed = card.classList.toggle('collapsed');
+            if (isCollapsed) expandedIds.delete(id);
+            else expandedIds.add(id);
         });
 
         // Add event
@@ -933,6 +1214,7 @@
                 completed: false
             };
             state.events.unshift(newEvent);
+            expandedIds.add(newEvent.id);
             setEventsDirty(true);
             // Switch to upcoming filter so the new event is visible
             if (state.filter === 'completed') {
@@ -942,7 +1224,7 @@
             }
             // Focus the name field of the new card
             requestAnimationFrame(() => {
-                const card = eventsList.querySelector(`[data-id="${newEvent.id}"]`);
+                const card = eventsList.querySelector(`[data-id="${CSS.escape(newEvent.id)}"]`);
                 if (card) {
                     const nameInput = card.querySelector('[data-field="name"]');
                     if (nameInput) nameInput.focus();
