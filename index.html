@@ -382,7 +382,7 @@
 
         .pb-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
 
@@ -807,6 +807,57 @@
             background: var(--color-accent);
         }
 
+        /* ── Contact Section ── */
+        .contact-section {
+            background: var(--color-bg);
+            text-align: center;
+            border-top: 1px solid var(--color-divider);
+        }
+
+        .contact-blurb {
+            font-size: 1rem;
+            color: var(--color-text-light);
+            max-width: 520px;
+            margin: 0 auto 2rem;
+        }
+
+        .contact-cta {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--color-accent);
+            color: var(--color-white);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .contact-cta:hover {
+            background: var(--color-dark);
+            transform: translateY(-2px);
+        }
+
+        .nav-contact {
+            color: var(--color-accent) !important;
+            font-weight: 500 !important;
+        }
+
+        .data-loading {
+            text-align: center;
+            color: var(--color-text-light);
+            font-style: italic;
+            padding: 2rem 0;
+        }
+
+        .data-error {
+            text-align: center;
+            color: #b04848;
+            padding: 2rem 0;
+        }
+
         /* ── Footer ── */
         footer {
             background: var(--color-dark);
@@ -909,7 +960,7 @@
             }
 
             .pb-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
             }
 
@@ -1119,24 +1170,13 @@
 
             .pb-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: 1fr 1fr;
                 gap: 0.5rem;
                 margin-top: 1.5rem;
             }
 
             .pb-card {
                 padding: 1rem 0.5rem;
-            }
-
-            .pb-card:nth-child(4),
-            .pb-card:nth-child(5) {
-                grid-column: auto;
-            }
-
-            /* Last two cards: center in a 2-col sub-row */
-            .pb-card:last-child {
-                max-width: none;
-                margin: 0;
             }
 
             .pb-distance {
@@ -1485,12 +1525,6 @@
                 gap: 0.4rem;
             }
 
-            .pb-card:nth-child(5) {
-                grid-column: 1 / -1;
-                max-width: calc(50% - 0.2rem);
-                margin: 0 auto;
-            }
-
             .pb-time {
                 font-size: 1.2rem;
             }
@@ -1543,6 +1577,7 @@
             <li><a href="#upcoming">Upcoming</a></li>
             <li><a href="#bracelets">Bracelets</a></li>
             <li><a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="mailto:cassandraorr55@gmail.com" class="nav-contact">Contact</a></li>
         </ul>
     </nav>
 
@@ -1553,15 +1588,15 @@
         <p class="hero-sub">Mother of three. Boston Marathon competitor. Course record holder. Proving that motherhood and elite athletics aren't mutually exclusive.</p>
         <div class="hero-stats">
             <div class="hero-stat">
-                <div class="hero-stat-value">2:34</div>
+                <div class="hero-stat-value" id="hero-stat-marathon">2:34</div>
                 <div class="hero-stat-label">Marathon</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">1:12</div>
+                <div class="hero-stat-value" id="hero-stat-half">1:12</div>
                 <div class="hero-stat-label">Half Marathon</div>
             </div>
             <div class="hero-stat">
-                <div class="hero-stat-value">10:03</div>
+                <div class="hero-stat-value" id="hero-stat-100k">10:03</div>
                 <div class="hero-stat-label">100km Ultra</div>
             </div>
         </div>
@@ -1613,23 +1648,19 @@
             <div class="pb-grid">
                 <div class="pb-card reveal">
                     <div class="pb-distance">10 km</div>
-                    <div class="pb-time">35:26</div>
+                    <div class="pb-time" id="pb-10km">35:26</div>
                 </div>
                 <div class="pb-card reveal">
                     <div class="pb-distance">Half Marathon</div>
-                    <div class="pb-time">1:12:54</div>
+                    <div class="pb-time" id="pb-halfMarathon">1:12:54</div>
                 </div>
                 <div class="pb-card reveal">
                     <div class="pb-distance">Marathon</div>
-                    <div class="pb-time">2:34:43</div>
-                </div>
-                <div class="pb-card reveal">
-                    <div class="pb-distance">54 km Ultra</div>
-                    <div class="pb-time">5:26:00</div>
+                    <div class="pb-time" id="pb-marathon">2:34:43</div>
                 </div>
                 <div class="pb-card reveal">
                     <div class="pb-distance">100 km Ultra</div>
-                    <div class="pb-time">10:03:12</div>
+                    <div class="pb-time" id="pb-100kmUltra">10:03:12</div>
                 </div>
             </div>
         </div>
@@ -1640,127 +1671,8 @@
         <div class="container">
             <p class="section-label">Race Results</p>
             <h2 class="section-title">From comeback to <em>course records</em></h2>
-
-            <!-- 2026 Season -->
-            <div class="season-block reveal">
-                <h3 class="season-year">2026</h3>
-                <div class="season-races">
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Boston Marathon
-                            <span class="race-badge badge-gold">Pro Start</span>
-                        </div>
-                        <div class="race-detail">1st Canadian Female &middot; 27th Overall Female</div>
-                    </div>
-                    <div class="race-placement">1st CAN Female</div>
-                    <div class="race-time">2:34:43</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Moonlight Run 10K
-                            <span class="race-badge badge-record">Course Record</span>
-                        </div>
-                        <div class="race-detail">1st Place Female &middot; Female course record (unofficial)</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">35:26</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">Mesa Half Marathon</div>
-                        <div class="race-detail">4th Place Female</div>
-                    </div>
-                    <div class="race-placement">4th Female</div>
-                    <div class="race-time">1:12:54</div>
-                </div>
-                </div>
-            </div>
-
-            <!-- 2025 Season -->
-            <div class="season-block reveal">
-                <h3 class="season-year">2025</h3>
-                <div class="season-races">
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Lost Soul Ultra 100km
-                            <span class="race-badge badge-record">Course Record</span>
-                        </div>
-                        <div class="race-detail">1st Overall (Male &amp; Female) &middot; 2200m elevation</div>
-                    </div>
-                    <div class="race-placement">1st Overall</div>
-                    <div class="race-time">10:03</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Black Spur Ultra 54km
-                            <span class="race-badge badge-record">Course Record</span>
-                        </div>
-                        <div class="race-detail">1st Place Female &middot; 2230m elevation</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">5:26:00</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">Royal Victoria Marathon</div>
-                        <div class="race-detail">1st Place Female</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">2:39:50</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Taber Tuff
-                            <span class="race-badge badge-record">Course Record</span>
-                        </div>
-                        <div class="race-detail">1st Place Female</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">2:16:02</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">
-                            Coulee Cactus Crawl
-                            <span class="race-badge badge-record">Course Record</span>
-                        </div>
-                        <div class="race-detail">1st Place Female</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">2:47:43</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">Stampede Road Race</div>
-                        <div class="race-detail">1st Place Female</div>
-                    </div>
-                    <div class="race-placement">1st Female</div>
-                    <div class="race-time">1:20</div>
-                </div>
-
-                <div class="race-row">
-                    <div>
-                        <div class="race-name">Calgary Marathon</div>
-                        <div class="race-detail">2nd Place Female &middot; 4 months postpartum</div>
-                    </div>
-                    <div class="race-placement">2nd Female</div>
-                    <div class="race-time">2:52:50</div>
-                </div>
-                </div>
+            <div id="results-content">
+                <p class="data-loading">Loading results&hellip;</p>
             </div>
         </div>
     </section>
@@ -1844,37 +1756,8 @@
         <div class="container">
             <p class="section-label">2026 Calendar</p>
             <h2 class="section-title">What's <em>next</em></h2>
-            <div class="upcoming-grid">
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">May 2, 2026</p>
-                    <h3 class="upcoming-name">Oldman Backyard Ultra</h3>
-                    <p class="upcoming-distance">Last-person-standing format</p>
-                </div>
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">May 25, 2026</p>
-                    <h3 class="upcoming-name">Calgary Marathon</h3>
-                    <p class="upcoming-distance">Marathon</p>
-                </div>
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">June 6, 2026</p>
-                    <h3 class="upcoming-name">Cactus Crawl</h3>
-                    <p class="upcoming-distance">20 Miler</p>
-                </div>
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">August 16, 2026</p>
-                    <h3 class="upcoming-name">Edmonton Half Marathon</h3>
-                    <p class="upcoming-distance">Half Marathon</p>
-                </div>
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">September 11, 2026</p>
-                    <h3 class="upcoming-name">Lost Soul Ultra</h3>
-                    <p class="upcoming-distance">100 Miles</p>
-                </div>
-                <div class="upcoming-card reveal">
-                    <p class="upcoming-date">October 17&ndash;18, 2026</p>
-                    <h3 class="upcoming-name">Toronto Waterfront Marathon</h3>
-                    <p class="upcoming-distance">Marathon</p>
-                </div>
+            <div class="upcoming-grid" id="upcoming-content">
+                <p class="data-loading">Loading upcoming races&hellip;</p>
             </div>
         </div>
     </section>
@@ -1929,6 +1812,16 @@
         </div>
     </section>
 
+    <!-- Contact -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <p class="section-label">Get in Touch</p>
+            <h2 class="section-title">Let's <em>connect</em></h2>
+            <p class="contact-blurb">For sponsorships, partnerships, custom bracelet inquiries, or just to say hello.</p>
+            <a href="mailto:cassandraorr55@gmail.com" class="contact-cta">Contact Cassandra</a>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="footer-name">Cassandra de Winter</div>
@@ -1937,21 +1830,24 @@
             <a href="#about">About</a>
             <a href="#results">Results</a>
             <a href="#bracelets">Bracelets</a>
+            <a href="mailto:cassandraorr55@gmail.com">Contact</a>
             <a href="https://www.instagram.com/cassdewinter.runs/" target="_blank" rel="noopener">Instagram</a>
         </div>
         <p class="footer-copy">&copy; 2026 Cassandra de Winter. All rights reserved.</p>
     </footer>
 
     <script>
-        // Navbar scroll effect
-        const nav = document.getElementById('navbar');
-        let lastScroll = 0;
+        // ── JSONBin config ──
+        const JSONBIN_BIN_ID = '69efb7f9856a6821897c5c96';
+        const JSONBIN_ACCESS_KEY = '$2a$10$9jAFK3ToTO5Zm4YLRDAzT.Oq78bd8Go/CltQm8vCgB497kXBUoTF.';
 
+        // ── Navbar scroll effect ──
+        const nav = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             nav.classList.toggle('scrolled', window.scrollY > 60);
         }, { passive: true });
 
-        // Mobile menu with scroll lock
+        // ── Mobile menu with scroll lock ──
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         let scrollPos = 0;
@@ -1981,14 +1877,13 @@
             });
         });
 
-        // Close menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navLinks.classList.contains('open')) {
                 toggleMenu();
             }
         });
 
-        // Scroll reveal with mobile-friendly thresholds
+        // ── Scroll reveal observer (shared) ──
         const isMobile = window.innerWidth <= 640;
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -2001,28 +1896,14 @@
             rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -40px 0px'
         });
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        function observeReveals(root) {
+            (root || document).querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+        }
 
-        // Collapsible sections (mobile only)
+        observeReveals();
+
+        // ── Background card collapsibles (static, attach once) ──
         if (isMobile) {
-            // Collapsible season blocks — 2025 starts collapsed
-            document.querySelectorAll('.season-year').forEach((header, index) => {
-                const races = header.nextElementSibling;
-                if (!races || !races.classList.contains('season-races')) return;
-
-                // Collapse all except the first (most recent) season
-                if (index > 0) {
-                    header.classList.add('collapsed');
-                    races.classList.add('collapsed');
-                }
-
-                header.addEventListener('click', () => {
-                    header.classList.toggle('collapsed');
-                    races.classList.toggle('collapsed');
-                });
-            });
-
-            // Collapsible background cards — all start collapsed
             document.querySelectorAll('.bg-card-header').forEach(header => {
                 const body = header.nextElementSibling;
                 if (!body || !body.classList.contains('bg-card-body')) return;
@@ -2036,6 +1917,175 @@
                 });
             });
         }
+
+        // ── Season collapsibles (re-attached after dynamic render) ──
+        function attachSeasonCollapsibles() {
+            if (!isMobile) return;
+            document.querySelectorAll('.season-year').forEach((header, index) => {
+                const races = header.nextElementSibling;
+                if (!races || !races.classList.contains('season-races')) return;
+                if (header.dataset.collapsibleAttached) return;
+                header.dataset.collapsibleAttached = 'true';
+
+                if (index > 0) {
+                    header.classList.add('collapsed');
+                    races.classList.add('collapsed');
+                }
+
+                header.addEventListener('click', () => {
+                    header.classList.toggle('collapsed');
+                    races.classList.toggle('collapsed');
+                });
+            });
+        }
+
+        // ── Data fetch & render ──
+        const BADGE_MAP = {
+            'Pro Start': 'badge-gold',
+            'Course Record': 'badge-record',
+            'Personal Best': 'badge-gold',
+            'Podium': 'badge-silver',
+            '1st Overall': 'badge-record'
+        };
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = (str == null) ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        function shortenTime(t) {
+            if (!t) return '';
+            const parts = String(t).split(':');
+            if (parts.length === 3) return parts[0] + ':' + parts[1];
+            return t;
+        }
+
+        function formatDate(iso) {
+            if (!iso) return '';
+            const parts = String(iso).split('-');
+            if (parts.length !== 3) return iso;
+            const y = Number(parts[0]);
+            const m = Number(parts[1]);
+            const d = Number(parts[2]);
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            if (!months[m - 1]) return iso;
+            return `${months[m - 1]} ${d}, ${y}`;
+        }
+
+        function updatePBs(pbs) {
+            if (!pbs) return;
+            const pbIds = {
+                '10km': 'pb-10km',
+                'halfMarathon': 'pb-halfMarathon',
+                'marathon': 'pb-marathon',
+                '100kmUltra': 'pb-100kmUltra'
+            };
+            Object.entries(pbIds).forEach(([key, id]) => {
+                const el = document.getElementById(id);
+                if (el && pbs[key]) el.textContent = pbs[key];
+            });
+
+            const heroIds = {
+                marathon: 'hero-stat-marathon',
+                halfMarathon: 'hero-stat-half',
+                '100kmUltra': 'hero-stat-100k'
+            };
+            Object.entries(heroIds).forEach(([key, id]) => {
+                const el = document.getElementById(id);
+                if (el && pbs[key]) el.textContent = shortenTime(pbs[key]);
+            });
+        }
+
+        function renderResults(events) {
+            const container = document.getElementById('results-content');
+            if (!container) return;
+            const completed = events.filter(e => e.completed);
+            if (completed.length === 0) {
+                container.innerHTML = '<p class="data-loading">No race results yet.</p>';
+                return;
+            }
+            const byYear = {};
+            completed.forEach(e => {
+                const year = e.date ? String(e.date).substring(0, 4) : 'Other';
+                if (!byYear[year]) byYear[year] = [];
+                byYear[year].push(e);
+            });
+            Object.keys(byYear).forEach(y => {
+                byYear[y].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            });
+            const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a));
+
+            let html = '';
+            years.forEach(year => {
+                html += `<div class="season-block reveal"><h3 class="season-year">${escapeHtml(year)}</h3><div class="season-races">`;
+                byYear[year].forEach(e => {
+                    const badgeClass = BADGE_MAP[e.label] || 'badge-gold';
+                    const badge = e.label ? `<span class="race-badge ${badgeClass}">${escapeHtml(e.label)}</span>` : '';
+                    html += `
+                        <div class="race-row">
+                            <div>
+                                <div class="race-name">${escapeHtml(e.name)}${badge}</div>
+                                ${e.details ? `<div class="race-detail">${escapeHtml(e.details)}</div>` : ''}
+                            </div>
+                            <div class="race-placement">${escapeHtml(e.place || '')}</div>
+                            <div class="race-time">${escapeHtml(e.time || '')}</div>
+                        </div>`;
+                });
+                html += `</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderUpcoming(events) {
+            const container = document.getElementById('upcoming-content');
+            if (!container) return;
+            const upcoming = events.filter(e => !e.completed)
+                .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+            if (upcoming.length === 0) {
+                container.innerHTML = '<p class="data-loading">No upcoming races scheduled.</p>';
+                return;
+            }
+            let html = '';
+            upcoming.forEach(e => {
+                html += `
+                    <div class="upcoming-card reveal">
+                        <p class="upcoming-date">${escapeHtml(formatDate(e.date))}</p>
+                        <h3 class="upcoming-name">${escapeHtml(e.name)}</h3>
+                        <p class="upcoming-distance">${escapeHtml(e.distance || '')}</p>
+                    </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Access-Key': JSONBIN_ACCESS_KEY,
+                        'X-Bin-Meta': 'false'
+                    }
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                const record = data && data.record ? data.record : data;
+
+                updatePBs(record.personalBests);
+                renderResults(record.events || []);
+                renderUpcoming(record.events || []);
+
+                observeReveals();
+                attachSeasonCollapsibles();
+            } catch (err) {
+                console.error('Failed to load data:', err);
+                const r = document.getElementById('results-content');
+                const u = document.getElementById('upcoming-content');
+                if (r) r.innerHTML = '<p class="data-error">Unable to load results. Please try again later.</p>';
+                if (u) u.innerHTML = '<p class="data-error">Unable to load upcoming races. Please try again later.</p>';
+            }
+        }
+
+        loadData();
     </script>
 
 </body>

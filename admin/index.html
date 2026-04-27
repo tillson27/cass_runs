@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin · Cassandra Runs</title>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23C4883A'/><text x='16' y='22' font-family='Georgia,serif' font-size='16' font-weight='600' fill='white' text-anchor='middle'>CR</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #FAF8F5;
+            --color-text: #2C2C2C;
+            --color-text-light: #6B6560;
+            --color-accent: #C4883A;
+            --color-accent-dark: #9A6B20;
+            --color-accent-soft: #E8D5BC;
+            --color-dark: #1A1A1A;
+            --color-white: #FFFFFF;
+            --color-divider: #E5DED6;
+            --color-success: #4a7c59;
+            --color-error: #b04848;
+            --font-heading: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.5;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        input, select, textarea {
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        /* ── Login Gate ── */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--color-white);
+            padding: 3rem 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+            border: 1px solid var(--color-divider);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--color-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+        }
+
+        .login-card label {
+            display: block;
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .login-card input:focus {
+            border-color: var(--color-accent);
+        }
+
+        .login-error {
+            color: var(--color-error);
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            min-height: 1.2em;
+            text-align: left;
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-white);
+            border: none;
+            padding: 0.85rem 1.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover { background: var(--color-accent-dark); }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-card .btn-primary {
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        /* ── Admin Layout ── */
+        .admin {
+            display: none;
+        }
+
+        .admin.active { display: block; }
+
+        .admin-header {
+            background: var(--color-white);
+            border-bottom: 1px solid var(--color-divider);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .admin-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--color-dark);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--color-divider);
+            color: var(--color-text);
+            padding: 0.6rem 1.1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: border-color 0.2s, color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid #d4b5b5;
+            color: var(--color-error);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: var(--color-error);
+            color: white;
+        }
+
+        .admin-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-section {
+            background: var(--color-white);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .section-heading h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-dark);
+        }
+
+        /* ── PB Form ── */
+        .pb-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .pb-field label {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 0.4rem;
+        }
+
+        .pb-field input {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: var(--font-heading);
+            font-weight: 500;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .pb-field input:focus { border-color: var(--color-accent); }
+
+        /* ── Filter Bar ── */
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: transparent;
+            border: 1px solid var(--color-divider);
+            color: var(--color-text-light);
+            padding: 0.45rem 0.95rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .filter-chip.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        /* ── Event Cards ── */
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .event-card {
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.1rem 1.25rem;
+            background: var(--color-bg);
+            transition: border-color 0.2s;
+        }
+
+        .event-card.completed {
+            background: rgba(196,136,58,0.04);
+        }
+
+        .event-card:focus-within { border-color: var(--color-accent); }
+
+        .event-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 0.85rem;
+        }
+
+        .event-completed-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .event-completed-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-accent);
+            cursor: pointer;
+        }
+
+        .event-completed-toggle.is-completed {
+            color: var(--color-accent);
+            font-weight: 500;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 0.75rem;
+        }
+
+        .event-grid label {
+            display: block;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .event-grid input,
+        .event-grid select {
+            width: 100%;
+            padding: 0.5rem 0.65rem;
+            border: 1px solid var(--color-divider);
+            border-radius: 4px;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background: var(--color-white);
+        }
+
+        .event-grid input:focus,
+        .event-grid select:focus { border-color: var(--color-accent); }
+
+        .field-name { grid-column: span 5; }
+        .field-date { grid-column: span 3; }
+        .field-label { grid-column: span 4; }
+        .field-distance { grid-column: span 4; }
+        .field-time { grid-column: span 3; }
+        .field-place { grid-column: span 5; }
+        .field-details { grid-column: span 12; }
+
+        /* ── Status messages ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--color-dark);
+            color: var(--color-white);
+            padding: 0.85rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success { background: var(--color-success); }
+        .toast.error { background: var(--color-error); }
+
+        .empty-state {
+            text-align: center;
+            color: var(--color-text-light);
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        .dirty-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .dirty-indicator.show { opacity: 1; }
+
+        .save-bar {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1.25rem;
+            align-items: center;
+        }
+
+        .save-status {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            margin-right: auto;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 720px) {
+            .admin-header {
+                padding: 0.85rem 1rem;
+            }
+
+            .admin-title { font-size: 1.15rem; }
+
+            .admin-main {
+                padding: 1rem;
+            }
+
+            .admin-section {
+                padding: 1.25rem;
+            }
+
+            .pb-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .event-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.6rem;
+            }
+
+            .field-name,
+            .field-date,
+            .field-label,
+            .field-distance,
+            .field-time,
+            .field-place,
+            .field-details {
+                grid-column: span 2;
+            }
+
+            .event-row {
+                grid-template-columns: 1fr auto;
+                gap: 0.75rem;
+            }
+
+            .save-bar {
+                flex-wrap: wrap;
+            }
+
+            .save-status {
+                width: 100%;
+                margin-right: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Gate -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo">Cassandra Runs</div>
+            <div class="login-subtitle">Admin Access</div>
+            <form id="loginForm">
+                <label for="passwordInput">Password</label>
+                <input type="password" id="passwordInput" autocomplete="off" autofocus>
+                <div class="login-error" id="loginError"></div>
+                <button type="submit" class="btn-primary">Enter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin App -->
+    <div class="admin" id="adminApp">
+        <header class="admin-header">
+            <div class="admin-title">Admin Dashboard</div>
+            <div class="admin-actions">
+                <a href="/" class="btn-ghost" target="_blank">View Site</a>
+                <button class="btn-ghost" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <!-- Personal Bests -->
+            <section class="admin-section">
+                <div class="section-heading">
+                    <h2>Personal Bests<span class="dirty-indicator" id="pbDirty"></span></h2>
+                </div>
+                <div class="pb-form">
+                    <div class="pb-field">
+                        <label for="pb-10km">10 km</label>
+                        <input type="text" id="pb-10km" placeholder="35:26" data-pb="10km">
+                    </div>
+                    <div class="pb-field">
+                        <label for="pb-halfMarathon">Half Marathon</label>
+                        <input type="text" id="pb-halfMarathon" placeholder="1:12:54" data-pb="halfMarathon">
+                    </div>
+                    <div class="pb-field">
+                        <label for="pb-marathon">Marathon</label>
+                        <input type="text" id="pb-marathon" placeholder="2:34:43" data-pb="marathon">
+                    </div>
+                    <div class="pb-field">
+                        <label for="pb-100kmUltra">100 km Ultra</label>
+                        <input type="text" id="pb-100kmUltra" placeholder="10:03:12" data-pb="100kmUltra">
+                    </div>
+                </div>
+                <div class="save-bar">
+                    <button class="btn-primary" id="savePBsBtn">Save Personal Bests</button>
+                </div>
+            </section>
+
+            <!-- Events -->
+            <section class="admin-section">
+                <div class="section-heading">
+                    <h2>Events<span class="dirty-indicator" id="eventsDirty"></span></h2>
+                    <div class="filter-bar">
+                        <button class="filter-chip active" data-filter="all">All</button>
+                        <button class="filter-chip" data-filter="upcoming">Upcoming</button>
+                        <button class="filter-chip" data-filter="completed">Completed</button>
+                        <button class="btn-primary" id="addEventBtn" style="margin-left:0.5rem">+ Add Event</button>
+                    </div>
+                </div>
+                <div class="events-list" id="eventsList">
+                    <div class="empty-state">Loading events&hellip;</div>
+                </div>
+                <div class="save-bar">
+                    <span class="save-status" id="saveStatus"></span>
+                    <button class="btn-primary" id="saveEventsBtn">Save All Events</button>
+                </div>
+            </section>
+        </main>
+
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script>
+        // ── Config ──
+        const JSONBIN_BIN_ID = '69efb7f9856a6821897c5c96';
+        const JSONBIN_MASTER_KEY = '$2a$10$U.7G08/Wlzd2bg2lG9WAseRxB2jqxI2S7.gTRc2mY94017EKD2d/e';
+        const ADMIN_PASSWORD = 'LA2028';
+        const SESSION_KEY = 'cdw_admin_session';
+
+        const LABEL_OPTIONS = ['', 'Pro Start', 'Course Record', 'Personal Best', 'Podium', '1st Overall'];
+
+        // ── State ──
+        const state = {
+            personalBests: { '10km': '', halfMarathon: '', marathon: '', '100kmUltra': '' },
+            events: [],
+            filter: 'all',
+            pbDirty: false,
+            eventsDirty: false
+        };
+
+        // ── DOM refs ──
+        const loginScreen = document.getElementById('loginScreen');
+        const adminApp = document.getElementById('adminApp');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const eventsList = document.getElementById('eventsList');
+        const saveStatus = document.getElementById('saveStatus');
+        const toastEl = document.getElementById('toast');
+        const pbDirtyEl = document.getElementById('pbDirty');
+        const eventsDirtyEl = document.getElementById('eventsDirty');
+
+        // ── Auth ──
+        function isAuthed() {
+            return sessionStorage.getItem(SESSION_KEY) === 'ok';
+        }
+
+        function setAuthed(v) {
+            if (v) sessionStorage.setItem(SESSION_KEY, 'ok');
+            else sessionStorage.removeItem(SESSION_KEY);
+        }
+
+        function showAdmin() {
+            loginScreen.style.display = 'none';
+            adminApp.classList.add('active');
+            loadData();
+        }
+
+        function showLogin() {
+            loginScreen.style.display = 'flex';
+            adminApp.classList.remove('active');
+            passwordInput.value = '';
+            loginError.textContent = '';
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                setAuthed(true);
+                showAdmin();
+            } else {
+                loginError.textContent = 'Incorrect password.';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            setAuthed(false);
+            location.reload();
+        });
+
+        // ── Toast ──
+        let toastTimer = null;
+        function showToast(msg, kind) {
+            toastEl.textContent = msg;
+            toastEl.className = 'toast show' + (kind ? ' ' + kind : '');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // ── Dirty tracking ──
+        function setPbDirty(v) {
+            state.pbDirty = v;
+            pbDirtyEl.classList.toggle('show', v);
+        }
+
+        function setEventsDirty(v) {
+            state.eventsDirty = v;
+            eventsDirtyEl.classList.toggle('show', v);
+        }
+
+        // ── Data load ──
+        async function loadData() {
+            try {
+                saveStatus.textContent = 'Loading…';
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_MASTER_KEY,
+                        'X-Bin-Meta': 'false'
+                    }
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                const record = data && data.record ? data.record : data;
+
+                state.personalBests = Object.assign(
+                    { '10km': '', halfMarathon: '', marathon: '', '100kmUltra': '' },
+                    record.personalBests || {}
+                );
+                state.events = Array.isArray(record.events) ? record.events.slice() : [];
+
+                renderPBs();
+                renderEvents();
+                setPbDirty(false);
+                setEventsDirty(false);
+                saveStatus.textContent = '';
+            } catch (err) {
+                console.error(err);
+                saveStatus.textContent = '';
+                showToast('Failed to load data: ' + err.message, 'error');
+                eventsList.innerHTML = '<div class="empty-state">Failed to load events.</div>';
+            }
+        }
+
+        // ── Save (whole record) ──
+        async function saveAll() {
+            const body = {
+                personalBests: state.personalBests,
+                events: state.events
+            };
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_MASTER_KEY
+                },
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) {
+                const txt = await res.text();
+                throw new Error(`HTTP ${res.status}: ${txt}`);
+            }
+            return res.json();
+        }
+
+        document.getElementById('savePBsBtn').addEventListener('click', async (e) => {
+            const btn = e.currentTarget;
+            btn.disabled = true;
+            saveStatus.textContent = 'Saving personal bests…';
+            try {
+                await saveAll();
+                setPbDirty(false);
+                showToast('Personal bests saved', 'success');
+                saveStatus.textContent = '';
+            } catch (err) {
+                console.error(err);
+                showToast('Save failed: ' + err.message, 'error');
+                saveStatus.textContent = '';
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById('saveEventsBtn').addEventListener('click', async (e) => {
+            const btn = e.currentTarget;
+            btn.disabled = true;
+            saveStatus.textContent = 'Saving events…';
+            try {
+                await saveAll();
+                setEventsDirty(false);
+                showToast('Events saved', 'success');
+                saveStatus.textContent = '';
+            } catch (err) {
+                console.error(err);
+                showToast('Save failed: ' + err.message, 'error');
+                saveStatus.textContent = '';
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // ── Personal Bests rendering ──
+        function renderPBs() {
+            document.querySelectorAll('[data-pb]').forEach(input => {
+                const key = input.dataset.pb;
+                input.value = state.personalBests[key] || '';
+            });
+        }
+
+        document.querySelectorAll('[data-pb]').forEach(input => {
+            input.addEventListener('input', () => {
+                state.personalBests[input.dataset.pb] = input.value;
+                setPbDirty(true);
+            });
+        });
+
+        // ── Events rendering ──
+        function generateEventId() {
+            return 'evt-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 7);
+        }
+
+        function escapeAttr(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function eventCardHTML(e) {
+            const labelOptions = LABEL_OPTIONS.map(opt => {
+                const display = opt === '' ? '— None —' : opt;
+                const sel = (opt === (e.label || '')) ? ' selected' : '';
+                return `<option value="${escapeAttr(opt)}"${sel}>${escapeAttr(display)}</option>`;
+            }).join('');
+
+            const completedClass = e.completed ? ' is-completed' : '';
+            const cardClass = e.completed ? 'event-card completed' : 'event-card';
+
+            return `
+                <div class="${cardClass}" data-id="${escapeAttr(e.id)}">
+                    <div class="event-row">
+                        <label class="event-completed-toggle${completedClass}">
+                            <input type="checkbox" data-field="completed" ${e.completed ? 'checked' : ''}>
+                            <span>${e.completed ? 'Completed' : 'Mark Complete'}</span>
+                        </label>
+                        <div></div>
+                        <button class="btn-danger" data-action="delete">Delete</button>
+                    </div>
+                    <div class="event-grid">
+                        <div class="field-name">
+                            <label>Name</label>
+                            <input type="text" data-field="name" value="${escapeAttr(e.name)}" placeholder="Event name">
+                        </div>
+                        <div class="field-date">
+                            <label>Date</label>
+                            <input type="date" data-field="date" value="${escapeAttr(e.date)}">
+                        </div>
+                        <div class="field-label">
+                            <label>Label</label>
+                            <select data-field="label">${labelOptions}</select>
+                        </div>
+                        <div class="field-distance">
+                            <label>Distance</label>
+                            <input type="text" data-field="distance" value="${escapeAttr(e.distance)}" placeholder="Marathon, 10K, etc.">
+                        </div>
+                        <div class="field-time">
+                            <label>Time</label>
+                            <input type="text" data-field="time" value="${escapeAttr(e.time)}" placeholder="2:34:43">
+                        </div>
+                        <div class="field-place">
+                            <label>Place</label>
+                            <input type="text" data-field="place" value="${escapeAttr(e.place)}" placeholder="1st Female">
+                        </div>
+                        <div class="field-details">
+                            <label>Details</label>
+                            <input type="text" data-field="details" value="${escapeAttr(e.details)}" placeholder="Optional description">
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function getFilteredEvents() {
+            if (state.filter === 'completed') {
+                return state.events.filter(e => e.completed);
+            }
+            if (state.filter === 'upcoming') {
+                return state.events.filter(e => !e.completed);
+            }
+            return state.events;
+        }
+
+        function renderEvents() {
+            const filtered = getFilteredEvents();
+            // Sort: upcoming first by date asc, completed by date desc
+            filtered.sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                if (a.completed) return (b.date || '').localeCompare(a.date || '');
+                return (a.date || '').localeCompare(b.date || '');
+            });
+
+            if (filtered.length === 0) {
+                eventsList.innerHTML = '<div class="empty-state">No events match the current filter.</div>';
+                return;
+            }
+
+            eventsList.innerHTML = filtered.map(eventCardHTML).join('');
+        }
+
+        // Field edit delegation
+        eventsList.addEventListener('input', (e) => {
+            const target = e.target;
+            const card = target.closest('.event-card');
+            if (!card) return;
+            const id = card.dataset.id;
+            const field = target.dataset.field;
+            if (!id || !field) return;
+            const evt = state.events.find(x => x.id === id);
+            if (!evt) return;
+
+            if (field === 'completed') {
+                evt.completed = target.checked;
+                // re-render to update card styling and toggle label
+                renderEvents();
+            } else {
+                evt[field] = target.value;
+            }
+            setEventsDirty(true);
+        });
+
+        eventsList.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action="delete"]');
+            if (!btn) return;
+            const card = btn.closest('.event-card');
+            if (!card) return;
+            const id = card.dataset.id;
+            const evt = state.events.find(x => x.id === id);
+            const name = evt && evt.name ? evt.name : 'this event';
+            if (!confirm(`Delete "${name}"? This cannot be undone (until you save, you can refresh to recover).`)) return;
+            state.events = state.events.filter(x => x.id !== id);
+            setEventsDirty(true);
+            renderEvents();
+        });
+
+        // Add event
+        document.getElementById('addEventBtn').addEventListener('click', () => {
+            const today = new Date().toISOString().substring(0, 10);
+            const newEvent = {
+                id: generateEventId(),
+                name: '',
+                label: '',
+                date: today,
+                time: '',
+                place: '',
+                distance: '',
+                details: '',
+                completed: false
+            };
+            state.events.unshift(newEvent);
+            setEventsDirty(true);
+            // Switch to upcoming filter so the new event is visible
+            if (state.filter === 'completed') {
+                setFilter('upcoming');
+            } else {
+                renderEvents();
+            }
+            // Focus the name field of the new card
+            requestAnimationFrame(() => {
+                const card = eventsList.querySelector(`[data-id="${newEvent.id}"]`);
+                if (card) {
+                    const nameInput = card.querySelector('[data-field="name"]');
+                    if (nameInput) nameInput.focus();
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+
+        // Filter chips
+        function setFilter(f) {
+            state.filter = f;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.filter === f);
+            });
+            renderEvents();
+        }
+
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => setFilter(chip.dataset.filter));
+        });
+
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (state.pbDirty || state.eventsDirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // ── Boot ──
+        if (isAuthed()) {
+            showAdmin();
+        } else {
+            showLogin();
+        }
+    </script>
+
+</body>
+</html>
